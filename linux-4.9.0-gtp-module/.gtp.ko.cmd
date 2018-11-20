@@ -1,0 +1,1 @@
+cmd_/home/vesh/openair-cn-extras/linux-4.9.0-gtp-module/gtp.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /home/vesh/openair-cn-extras/linux-4.9.0-gtp-module/gtp.ko /home/vesh/openair-cn-extras/linux-4.9.0-gtp-module/gtp.o /home/vesh/openair-cn-extras/linux-4.9.0-gtp-module/gtp.mod.o ;  true
