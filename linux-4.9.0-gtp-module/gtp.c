@@ -39,12 +39,12 @@
 
 // Backported from net-next
 #define ETH_MIN_MTU       68              /* Min IPv4 MTU per RFC791      */
-
+/*
 enum ifla_gtp_role {
         GTP_ROLE_GGSN = 0,
         GTP_ROLE_SGSN,
 };
-
+*/
 #define GTP_PDP_HASHSIZE 1024
 #define GTPA_PEER_ADDRESS GTPA_SGSN_ADDRESS /* maintain legacy attr name */
 
@@ -746,7 +746,7 @@ static const struct net_device_ops gtp_netdev_ops = {
 static void gtp_link_setup(struct net_device *dev)
 {
 	dev->netdev_ops		= &gtp_netdev_ops;
-	dev->destructor		= free_netdev;
+	dev->priv_destructor		= free_netdev;
 
 	dev->hard_header_len = 0;
 	dev->addr_len = 0;
@@ -767,7 +767,7 @@ static void gtp_link_setup(struct net_device *dev)
 }
 
 static int gtp_newlink(struct net *src_net, struct net_device *dev,
-			struct nlattr *tb[], struct nlattr *data[])
+			struct nlattr *tb[], struct nlattr *data[], struct netlink_ext_ack *extack)
 {
 	struct gtp_dev *gtp;
 	struct gtp_net *gn;
@@ -829,7 +829,7 @@ static const struct nla_policy gtp_policy[IFLA_GTP_MAX + 1] = {
 	// [IFLA_GTP_ROLE]			= { .type = NLA_U32 },
 };
 
-static int gtp_validate(struct nlattr *tb[], struct nlattr *data[])
+static int gtp_validate(struct nlattr *tb[], struct nlattr *data[],struct netlink_ext_ack *extack)
 {
 	if (!data)
 		return -EINVAL;
@@ -902,7 +902,7 @@ static int gtp_configure(struct net *net, struct net_device *dev,
 		return -EBUSY;
 
 	dev->netdev_ops		= &gtp_netdev_ops;
-	dev->destructor		= free_netdev;
+	dev->priv_destructor		= free_netdev;
 
 	dev->hard_header_len = 0;
 	dev->addr_len = 0;
